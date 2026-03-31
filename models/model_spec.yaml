@@ -1,0 +1,80 @@
+# Biomass Estimation Model Configuration
+# ========================================
+
+model:
+  name: biomass-estimator
+  version: "2.3"
+  description: "Satellite-based aboveground biomass (AGB) estimation model"
+  algorithm: random_forest
+  
+  hyperparameters:
+    n_estimators: 200
+    max_depth: 15
+    min_samples_split: 5
+    min_samples_leaf: 3
+    max_features: "sqrt"
+    random_state: 42
+
+features:
+  primary:
+    - ndvi_mean          # Mean NDVI over parcel
+    - ndvi_median        # Median NDVI
+    - ndvi_std           # NDVI standard deviation (heterogeneity)
+    - ndvi_min           # Minimum NDVI
+    - ndvi_max           # Maximum NDVI
+    - ndvi_p25           # 25th percentile NDVI
+    - ndvi_p75           # 75th percentile NDVI
+    - forest_cover_fraction  # Fraction of pixels with NDVI > 0.3
+  
+  auxiliary:
+    - area_hectares      # Parcel area
+    - latitude           # Geographic latitude
+    - longitude          # Geographic longitude
+    - elevation          # Terrain elevation (if available)
+    - slope              # Terrain slope (if available)
+
+target:
+  column: biomass_tonnes_per_ha
+  unit: "tonnes per hectare"
+
+conversion_factors:
+  # IPCC standard conversion factors
+  biomass_to_carbon: 0.47              # AGB × 0.47 = Carbon (IPCC Tier 1)
+  carbon_to_co2e: 3.667               # Carbon × 44/12 = CO₂ equivalent
+  credit_per_tco2e: 1.0               # 1 carbon credit = 1 tCO₂e
+  
+  # Forest type adjustments (root-to-shoot ratios)
+  forest_type_factors:
+    tropical_evergreen: 1.30
+    tropical_wet_evergreen: 1.35
+    tropical_moist: 1.15
+    mangrove: 0.95
+    deciduous: 0.85
+    dry_deciduous: 0.70
+    moist_deciduous: 0.90
+    alpine: 0.50
+    alpine_meadow: 0.35
+
+training:
+  test_size: 0.2
+  cross_validation:
+    method: spatial_kfold  # Spatial cross-validation to avoid data leakage
+    n_folds: 5
+  
+  metrics:
+    - r2
+    - rmse
+    - mae
+    - mape
+
+azure_ml:
+  workspace: carbon-monitor-ml
+  experiment: biomass-estimation
+  compute_target: STANDARD-DS3-v2
+  environment: carbon-env
+  model_registry_name: biomass-estimator
+  
+  deployment:
+    endpoint_name: biomass-prediction
+    instance_type: Standard_DS3_v2
+    instance_count: 1
