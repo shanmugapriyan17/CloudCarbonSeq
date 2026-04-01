@@ -3,12 +3,30 @@ import { MapContainer, TileLayer, Marker, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
 import { api } from '../utils/api';
 
+// All 20 monitored Indian forest reserves — matches LandingPage & Analytics data
 const MOCK_REGIONS = [
-    { id: 'amz-west-24', name: 'WESTERN GHATS', country: 'Kerala, India', ndvi_current: 0.82, biomass_tonnes: 98400, health_score: 88, area_ha: 12400, lat: 10.8, lng: 76.3 },
-    { id: 'sun-bay-01',  name: 'SUNDARBANS',    country: 'West Bengal', ndvi_current: 0.72, biomass_tonnes: 56100, health_score: 74, area_ha: 8200, lat: 21.9, lng: 88.9 },
-    { id: 'nmd-arp-12',  name: 'NAMDAPHA NP',  country: 'Arunachal Pradesh', ndvi_current: 0.85, biomass_tonnes: 72300, health_score: 92, area_ha: 15400, lat: 27.5, lng: 96.7 },
-    { id: 'sil-val-kr',  name: 'SILENT VALLEY', country: 'Kerala, India', ndvi_current: 0.88, biomass_tonnes: 18200, health_score: 96, area_ha: 2400, lat: 11.1, lng: 76.4 },
+    { id: 'wg-ker-01',  name: 'WESTERN GHATS',     country: 'Kerala, India',          ndvi_current: 0.82, biomass_tonnes: 98400,  health_score: 88, area_ha: 124000, lat: 10.8,  lng: 76.3  },
+    { id: 'sun-wb-01',  name: 'SUNDARBANS',         country: 'West Bengal, India',     ndvi_current: 0.72, biomass_tonnes: 56100,  health_score: 74, area_ha: 82000,  lat: 21.9,  lng: 88.9  },
+    { id: 'nmd-ar-01',  name: 'NAMDAPHA NP',        country: 'Arunachal Pradesh',      ndvi_current: 0.85, biomass_tonnes: 72300,  health_score: 92, area_ha: 154000, lat: 27.5,  lng: 96.7  },
+    { id: 'sil-kr-01',  name: 'SILENT VALLEY',      country: 'Kerala, India',          ndvi_current: 0.88, biomass_tonnes: 18200,  health_score: 96, area_ha: 24000,  lat: 11.1,  lng: 76.4  },
+    { id: 'nlg-tn-01',  name: 'NILGIRI BIOSPHERE',  country: 'Tamil Nadu, India',      ndvi_current: 0.80, biomass_tonnes: 143000, health_score: 84, area_ha: 585000, lat: 11.5,  lng: 76.6  },
+    { id: 'kzr-as-01',  name: 'KAZIRANGA NP',       country: 'Assam, India',           ndvi_current: 0.75, biomass_tonnes: 34200,  health_score: 79, area_ha: 43000,  lat: 26.6,  lng: 93.2  },
+    { id: 'mns-as-01',  name: 'MANAS NP',           country: 'Assam, India',           ndvi_current: 0.73, biomass_tonnes: 29100,  health_score: 76, area_ha: 39000,  lat: 26.7,  lng: 90.7  },
+    { id: 'pnn-mp-01',  name: 'PANNA NP',           country: 'Madhya Pradesh, India',  ndvi_current: 0.62, biomass_tonnes: 21500,  health_score: 62, area_ha: 54000,  lat: 24.7,  lng: 80.0  },
+    { id: 'bnd-ka-01',  name: 'BANDIPUR NP',        country: 'Karnataka, India',       ndvi_current: 0.78, biomass_tonnes: 41800,  health_score: 83, area_ha: 87000,  lat: 11.7,  lng: 76.6  },
+    { id: 'anm-tn-01',  name: 'ANAMALAI TR',        country: 'Tamil Nadu, India',      ndvi_current: 0.81, biomass_tonnes: 37200,  health_score: 86, area_ha: 96000,  lat: 10.4,  lng: 77.0  },
+    { id: 'prr-kr-01',  name: 'PERIYAR NP',         country: 'Kerala, India',          ndvi_current: 0.79, biomass_tonnes: 31600,  health_score: 84, area_ha: 78000,  lat:  9.5,  lng: 77.2  },
+    { id: 'sjy-mp-01',  name: 'SANJAY NP',          country: 'Madhya Pradesh, India',  ndvi_current: 0.65, biomass_tonnes: 18900,  health_score: 63, area_ha: 45000,  lat: 23.7,  lng: 83.5  },
+    { id: 'ddw-up-01',  name: 'DUDHWA NP',          country: 'Uttar Pradesh, India',   ndvi_current: 0.70, biomass_tonnes: 26400,  health_score: 72, area_ha: 61000,  lat: 28.6,  lng: 80.5  },
+    { id: 'cbt-uk-01',  name: 'CORBETT NP',         country: 'Uttarakhand, India',     ndvi_current: 0.74, biomass_tonnes: 33100,  health_score: 77, area_ha: 52000,  lat: 29.5,  lng: 78.9  },
+    { id: 'srs-rj-01',  name: 'SARISKA NP',         country: 'Rajasthan, India',       ndvi_current: 0.60, biomass_tonnes: 15200,  health_score: 59, area_ha: 39000,  lat: 27.3,  lng: 76.4  },
+    { id: 'bht-od-01',  name: 'BHITARKANIKA',       country: 'Odisha, India',          ndvi_current: 0.76, biomass_tonnes: 22800,  health_score: 80, area_ha: 25000,  lat: 20.7,  lng: 87.0  },
+    { id: 'sml-od-01',  name: 'SIMLIPAL NP',        country: 'Odisha, India',          ndvi_current: 0.77, biomass_tonnes: 28500,  health_score: 81, area_ha: 284000, lat: 21.8,  lng: 86.5  },
+    { id: 'knh-mh-01',  name: 'KANHERI CAVE FR',    country: 'Maharashtra, India',     ndvi_current: 0.68, biomass_tonnes: 9200,   health_score: 68, area_ha: 10500,  lat: 19.2,  lng: 72.9  },
+    { id: 'stm-rj-01',  name: 'SITAMATA WLS',       country: 'Rajasthan, India',       ndvi_current: 0.66, biomass_tonnes: 13600,  health_score: 65, area_ha: 42000,  lat: 24.0,  lng: 74.3  },
+    { id: 'dnd-ka-01',  name: 'DANDELI NP',         country: 'Karnataka, India',       ndvi_current: 0.79, biomass_tonnes: 35800,  health_score: 83, area_ha: 82000,  lat: 15.3,  lng: 74.6  },
 ];
+
 
 function ndviColor(v) {
     if (v >= 0.8) return 'var(--secondary)';
@@ -33,12 +51,33 @@ function generateNDVI(baseNDVI) {
     });
 }
 
+// Marker colors: clean, visible scheme — no orange
 function createRegionIcon(isSelected, healthScore) {
-    const c = healthScore >= 90 ? '#1c6d25' : (healthScore >= 75 ? '#00649b' : '#9f403d');
-    const bg = `${c}40`; // 25% opacity
+    // Emerald green, sky blue, amber (only for moderate), red — clear against aerial imagery
+    const c = healthScore >= 90 ? '#22c55e'
+             : healthScore >= 75 ? '#38bdf8'
+             : healthScore >= 60 ? '#f59e0b'
+             : '#ef4444';
+    const size = isSelected ? 52 : 34;
+    const innerSize = isSelected ? 14 : 9;
+    // Outer translucent ring + solid inner square
     return L.divIcon({
         className: 'custom-leaflet-icon',
-        html: `<div style="width: ${isSelected ? 48 : 32}px; height: ${isSelected ? 48 : 32}px; background: ${bg}; border: 2px solid ${isSelected ? c : 'rgba(173,179,180,0.4)'}; display: flex; align-items: center; justify-content: center; transform: translate(-50%, -50%); transition: all 0.2s;"><div style="width: ${isSelected ? 12 : 8}px; height: ${isSelected ? 12 : 8}px; background: ${c};"></div></div>`,
+        html: `<div style="
+            width: ${size}px; height: ${size}px;
+            background: ${c}22;
+            border: 2px solid ${c};
+            display: flex; align-items: center; justify-content: center;
+            transform: translate(-50%, -50%);
+            transition: all 0.2s ease;
+            box-shadow: 0 0 ${isSelected ? 12 : 4}px ${c}88;
+        "><div style="
+            width: ${innerSize}px; height: ${innerSize}px;
+            background: ${c};
+            box-shadow: inset 0 0 2px rgba(0,0,0,0.4);
+        "></div></div>`,
+        iconSize: [size, size],
+        iconAnchor: [size / 2, size / 2],
     });
 }
 
@@ -98,16 +137,17 @@ export default function SatelliteMonitoring() {
                     {/* Interactive Leaflet Map Layer */}
                     <div style={{ position: 'absolute', inset: 0, zIndex: 1, filter: 'grayscale(0.5) contrast(1.1) brightness(0.9)' }}>
                         <MapContainer 
-                            center={[20, 80]} 
+                            center={[20.5, 80]} 
                             zoom={5} 
-                            style={{ width: '100%', height: '100%', background: '#0a0f1a' }}
+                            style={{ width: '100%', height: '100%', background: '#0d1117' }}
                             zoomControl={false}
                             scrollWheelZoom={true}
                         >
                             <ZoomControl position="bottomleft" />
+                            {/* Clean dark OSM tile — markers are clearly visible */}
                             <TileLayer 
-                                url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-                                attribution="Tiles &copy; Esri"
+                                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                                attribution="&copy; <a href='https://carto.com/'>CARTO</a>"
                             />
                             {regions.map(r => (
                                 <Marker 
@@ -121,7 +161,42 @@ export default function SatelliteMonitoring() {
                     </div>
 
                     {/* Dot overlay for tech aesthetic */}
-                    <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none', opacity: 0.1, backgroundImage: 'radial-gradient(#000 0.5px, transparent 0.5px)', backgroundSize: '15px 15px' }} />
+                    <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none', opacity: 0.04, backgroundImage: 'radial-gradient(#fff 0.5px, transparent 0.5px)', backgroundSize: '15px 15px' }} />
+
+                    {/* Map colour legend */}
+                    <div style={{ position: 'absolute', bottom: 48, left: 12, zIndex: 10, background: 'rgba(13,17,23,0.88)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 14px', display: 'flex', flexDirection: 'column', gap: 5 }}>
+                        <div style={{ fontSize: 8, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.5)', marginBottom: 2 }}>Marker Legend</div>
+                        {[
+                            { color: '#22c55e', label: 'Excellent (≥90%)' },
+                            { color: '#38bdf8', label: 'Good (75–89%)' },
+                            { color: '#f59e0b', label: 'Moderate (60–74%)' },
+                            { color: '#ef4444', label: 'At Risk (<60%)' },
+                        ].map(({ color, label }) => (
+                            <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                <div style={{ width: 10, height: 10, background: color, flexShrink: 0 }} />
+                                <span style={{ fontSize: 9, fontWeight: 600, color: 'rgba(255,255,255,0.75)' }}>{label}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Scrollable region quick-select list */}
+                    <div style={{ position: 'absolute', top: 12, right: 12, zIndex: 10, background: 'rgba(13,17,23,0.88)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)', width: 190, maxHeight: 'calc(100% - 80px)', overflowY: 'auto', scrollbarWidth: 'thin' }}>
+                        <div style={{ padding: '8px 12px', fontSize: 8, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.5)', borderBottom: '1px solid rgba(255,255,255,0.08)', position: 'sticky', top: 0, background: 'rgba(13,17,23,0.95)' }}>20 Monitored Regions</div>
+                        {MOCK_REGIONS.map(r => {
+                            const markerColor = r.health_score >= 90 ? '#22c55e' : r.health_score >= 75 ? '#38bdf8' : r.health_score >= 60 ? '#f59e0b' : '#ef4444';
+                            return (
+                                <button key={r.id} onClick={() => setSelected(r)}
+                                    style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '7px 12px', background: selected?.id === r.id ? 'rgba(255,255,255,0.08)' : 'transparent', border: 'none', borderBottom: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer', textAlign: 'left' }}>
+                                    <div style={{ width: 8, height: 8, background: markerColor, flexShrink: 0, boxShadow: `0 0 6px ${markerColor}88` }} />
+                                    <div>
+                                        <div style={{ fontSize: 9, fontWeight: 700, color: selected?.id === r.id ? '#fff' : 'rgba(255,255,255,0.8)', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.2 }}>{r.name}</div>
+                                        <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.4)', marginTop: 1 }}>{r.country.split(',')[0]}</div>
+                                    </div>
+                                    <div style={{ marginLeft: 'auto', fontSize: 9, fontWeight: 700, color: markerColor }}>{r.health_score}%</div>
+                                </button>
+                            );
+                        })}
+                    </div>
 
                     {/* Telemetry overlay */}
                     <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 10, background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(12px)', border: '1px solid rgba(173,179,180,0.4)', padding: 16, width: 176 }}>
