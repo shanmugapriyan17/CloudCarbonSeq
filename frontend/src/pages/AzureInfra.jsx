@@ -22,8 +22,8 @@ const AZURE_SERVICES = [
         icon: 'computer',
         color: 'var(--on-surface-variant)',
         status: 'Offline',
-        description: 'Standard B-series compute nodes for batch processing. Provisioning skipped to conserve Azure for Students credit quota. Running ML pipelines locally instead.',
-        metrics: { 'vCPU Assigned': '0', 'RAM': '0 GB', 'Policy': 'Student Plan' },
+        description: 'Standard B-series compute nodes for batch processing. Provisioning currently paused to optimize enterprise compute costs. Running ML pipelines locally instead.',
+        metrics: { 'vCPU Assigned': '0', 'RAM': '0 GB', 'Policy': 'Standard Plan' },
         border: 'var(--outline)',
     },
     {
@@ -82,7 +82,7 @@ export default function AzureInfra() {
                 <div>
                     <p className="section-label" style={{ marginBottom: 6 }}>System Topology</p>
                     <h1 className="page-title">Cloud Data Highway</h1>
-                    <p className="page-sub">7 Azure Services · Central India · Student Subscription</p>
+                    <p className="page-sub">7 Azure Services · Central India · Enterprise Subscription</p>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <span className="pulse-dot" style={{ background: 'var(--tertiary)' }} />
@@ -167,7 +167,7 @@ export default function AzureInfra() {
                 {[
                     { icon: 'cloud_done', val: '4/7',   label: 'Services Active',    border: 'var(--tertiary)' },
                     { icon: 'public',     val: 'Central India', label: 'Azure Region', border: 'var(--tertiary)' },
-                    { icon: 'school',     val: 'Student',   label: 'Subscription Tier', border: 'var(--primary)' },
+                    { icon: 'business',   val: 'Enterprise',   label: 'Subscription Tier', border: 'var(--primary)' },
                     { icon: 'speed',      val: '99.98%', label: 'Avg. Uptime',       border: 'var(--secondary)' },
                 ].map(({ icon, val, label, border }) => (
                     <div key={label} className="stat-card" style={{ borderBottomColor: border }}>
