@@ -20,29 +20,29 @@ const AZURE_SERVICES = [
     {
         name: 'Azure Virtual Machines',
         icon: 'computer',
-        color: 'var(--primary)',
-        status: 'Restricted',
-        description: 'Standard B-series compute nodes for batch processing. Currently restricted by university Azure Student VNET policy. Cloud Governance demo point.',
-        metrics: { 'vCPU Assigned': '4', 'RAM': '16 GB', 'Policy': 'Student Plan' },
+        color: 'var(--on-surface-variant)',
+        status: 'Offline',
+        description: 'Standard B-series compute nodes for batch processing. Provisioning skipped to conserve Azure for Students credit quota. Running ML pipelines locally instead.',
+        metrics: { 'vCPU Assigned': '0', 'RAM': '0 GB', 'Policy': 'Student Plan' },
         border: 'var(--outline)',
     },
     {
         name: 'Azure Machine Learning',
         icon: 'psychology',
-        color: 'var(--secondary)',
-        status: 'Active',
-        description: 'AutoML runs for NDVI regression and biomass prediction. Registered models for carbon stock estimation with SAR feature inputs.',
-        metrics: { 'Models Registered': '3', 'Accuracy': '87.4%', 'Train Time': '~12 min' },
-        border: 'var(--secondary)',
+        color: 'var(--on-surface-variant)',
+        status: 'Offline',
+        description: 'AutoML runs for NDVI regression and biomass prediction. Cluster deployment paused. Model currently trained locally and deployed as static binary.',
+        metrics: { 'Models Registered': '0', 'Compute Nodes': '0', 'Status': 'Pending' },
+        border: 'var(--outline)',
     },
     {
         name: 'Synapse Analytics',
         icon: 'analytics',
-        color: 'var(--tertiary)',
-        status: 'Active',
-        description: 'Serverless SQL pools for querying Parquet and GeoTIFF datasets. Supports T-SQL analytics on carbon sequestration outputs.',
-        metrics: { 'Queries/day': '840', 'Data Scanned': '1.2 TB', 'Serverless': 'Yes' },
-        border: 'var(--tertiary)',
+        color: 'var(--on-surface-variant)',
+        status: 'Offline',
+        description: 'Serverless SQL pools for querying Parquet datasets. Not yet deployed. Currently relying on App Service in-memory DB for dashboard demo.',
+        metrics: { 'Queries/day': '0', 'Data Scanned': '0 TB', 'Serverless': 'Pending' },
+        border: 'var(--outline)',
     },
     {
         name: 'Azure App Service',
@@ -58,8 +58,8 @@ const AZURE_SERVICES = [
         icon: 'monitoring',
         color: 'var(--secondary)',
         status: 'Active',
-        description: 'Application Insights for API latency tracking and uptime monitoring. Kusto queries over performance counters for satellite ingestion pipeline health.',
-        metrics: { 'Alerts': '4 active', 'Logs': '99.98% uptime', 'Retention': '30 days' },
+        description: 'Application Insights active in carbonseq-project-rg. Tracks API latency and uptime. Real-time telemetry connection is established.',
+        metrics: { 'Location': 'Central India', 'Logs': 'Connected', 'Inst. Key': '15937305-...ddf8a' },
         border: 'var(--secondary)',
     },
 ];
@@ -85,8 +85,8 @@ export default function AzureInfra() {
                     <p className="page-sub">7 Azure Services · Central India · Student Subscription</p>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span className="pulse-dot" />
-                    <span style={{ fontSize: 'var(--font-xs)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--secondary)' }}>All Systems Operational</span>
+                    <span className="pulse-dot" style={{ background: 'var(--tertiary)' }} />
+                    <span style={{ fontSize: 'var(--font-xs)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--tertiary)' }}>Partial Operations (Cost-Saving Mode)</span>
                 </div>
             </div>
 
@@ -165,7 +165,7 @@ export default function AzureInfra() {
             {/* Summary Stats */}
             <div className="stats-grid" style={{ marginTop: 8, marginBottom: 0 }}>
                 {[
-                    { icon: 'cloud_done', val: '6/7',   label: 'Services Active',    border: 'var(--secondary)' },
+                    { icon: 'cloud_done', val: '4/7',   label: 'Services Active',    border: 'var(--tertiary)' },
                     { icon: 'public',     val: 'Central India', label: 'Azure Region', border: 'var(--tertiary)' },
                     { icon: 'school',     val: 'Student',   label: 'Subscription Tier', border: 'var(--primary)' },
                     { icon: 'speed',      val: '99.98%', label: 'Avg. Uptime',       border: 'var(--secondary)' },

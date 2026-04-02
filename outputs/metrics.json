@@ -1,0 +1,10 @@
+{
+  "biomass_mae_tonnes_per_ha": 19.13,
+  "biomass_rmse_tonnes_per_ha": 23.2,
+  "biomass_r2": 0.8911,
+  "carbon_mae_tonnes_per_ha": 8.99,
+  "co2e_mae_tonnes_per_ha": 32.97,
+  "total_samples": 100,
+  "mean_biomass_actual": 185.76,
+  "mean_biomass_predicted": 169.36
+}
