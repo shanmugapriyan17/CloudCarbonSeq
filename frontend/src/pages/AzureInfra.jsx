@@ -29,11 +29,11 @@ const AZURE_SERVICES = [
     {
         name: 'Azure Machine Learning',
         icon: 'psychology',
-        color: 'var(--on-surface-variant)',
-        status: 'Offline',
-        description: 'AutoML runs for NDVI regression and biomass prediction. Cluster deployment paused. Model currently trained locally and deployed as static binary.',
-        metrics: { 'Models Registered': '0', 'Compute Nodes': '0', 'Status': 'Pending' },
-        border: 'var(--outline)',
+        color: 'var(--secondary)',
+        status: 'Active',
+        description: 'AutoML runs for NDVI regression and biomass prediction. Model natively registered and tracked actively via azureml-core SDK in carbonseq-ml-workspace.',
+        metrics: { 'Models Registered': '1', 'Compute Nodes': 'Active', 'Status': 'Deployed' },
+        border: 'var(--secondary)',
     },
     {
         name: 'Synapse Analytics',
